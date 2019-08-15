@@ -7,19 +7,26 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.List
 import java.util.stream.Collectors
+import net.bramp.ffmpeg.FFmpeg
 import net.bramp.ffmpeg.FFprobe
 
 class VideoGenerator {
 
+	/*these should be stored in a generator instance and exposed so the ui can display important stuff  */
 	var static FFprobe ffprobe
+	var static FFmpeg ffmpeg
 
 	def static generate(YtpModel root) {
-		ffprobe = new FFprobe("/path/to/ffprobe");
+		ffprobe = new FFprobe(root.information.ffprobe)
+		ffmpeg = new FFmpeg(root.information.ffmpeg)
+		var debugString = ffmpeg.version + "\n" + ffprobe.version
+		println(debugString)
+
 		loadLibraries(root.information.library)
 	}
 
 	def static loadLibraries(List<VideoLibrary> libraries) {
-		libraries.forEach[lib|scanLibrary(lib)]
+		libraries.map[lib | scanLibrary(lib)].stream.flatMap[l | l.stream].collect(Collectors.toList)
 	}
 
 	def static scanLibrary(VideoLibrary lib) {
@@ -30,9 +37,9 @@ class VideoGenerator {
 			[path, attr | lib.extension.stream.anyMatch(ext | path.fileName.toString.endsWith(ext))])
 		.collect(Collectors.toList)
 
-		res.forEach[video | ]
+		res.forEach[video | println(video + " " + ffprobe.probe(video.toString).format.duration) ]
 		println(res.size + " files found")
-
+		res
 	}
 
 }

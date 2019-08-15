@@ -11,5 +11,6 @@ Require-Bundle: fr.ytpdsl,
  org.eclipse.xtext.xbase.ide,
  org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: fr.ytpdsl.ide.contentassist.antlr.internal,
- fr.ytpdsl.ide.contentassist.antlr
+Export-Package: fr.ytpdsl.ide,
+ fr.ytpdsl.ide.contentassist.antlr,
+ fr.ytpdsl.ide.contentassist.antlr.internal

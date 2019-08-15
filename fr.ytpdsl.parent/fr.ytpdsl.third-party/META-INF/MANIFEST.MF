@@ -6,7 +6,11 @@ Bundle-Version: 1.0.0.qualifier
 Automatic-Module-Name: fr.ytpdsl.third-party
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: lib/ffmpeg-0.6.2.jar,
- .
+ .,
+ lib/slf4j-api-1.7.28.jar,
+ lib/guava-20.0.jar,
+ lib/gson-2.8.0.jar,
+ lib/commons-lang3-3.5.jar
 Export-Package: net.bramp.commons.lang3.math.gson,
  net.bramp.ffmpeg,
  net.bramp.ffmpeg.builder,

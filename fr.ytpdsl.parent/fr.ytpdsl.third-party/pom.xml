@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -10,35 +11,65 @@
 	<packaging>eclipse-plugin</packaging>
 
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <!-- copy  -->
-                        <id>copy</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<!-- copy -->
+						<id>copy</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
 								<artifactItem>
-                            		<groupId>net.bramp.ffmpeg</groupId>
+									<groupId>net.bramp.ffmpeg</groupId>
 									<artifactId>ffmpeg</artifactId>
 									<version>0.6.2</version>
-                                   	<outputDirectory>lib</outputDirectory>
-                                    <overWrite>true</overWrite>
-                            	</artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+									<outputDirectory>lib</outputDirectory>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<!-- Life sucks, because of OSGi we have to manually re-export all the transitive dependencies -->
+								<artifactItem>
+									<groupId>org.slf4j</groupId>
+									<artifactId>slf4j-api</artifactId>
+									<version>1.7.28</version>
+									<outputDirectory>lib</outputDirectory>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.google.guava</groupId>
+									<artifactId>guava</artifactId>
+									<version>20.0</version>
+									<outputDirectory>lib</outputDirectory>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.google.code.gson</groupId>
+									<artifactId>gson</artifactId>
+									<version>2.8.0</version>
+									<outputDirectory>lib</outputDirectory>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.commons</groupId>
+									<artifactId>commons-lang3</artifactId>
+									<version>3.5</version>
+									<outputDirectory>lib</outputDirectory>
+									<overWrite>true</overWrite>
+								</artifactItem>
+
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 
 </project>

@@ -21,7 +21,12 @@ Require-Bundle: fr.ytpdsl,
  org.eclipse.ui.console;bundle-version="3.8.500"
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: fr.ytpdsl.ui.contentassist,
+Export-Package: fr.ytpdsl.ui,
+ fr.ytpdsl.ui.contentassist,
+ fr.ytpdsl.ui.handlers,
+ fr.ytpdsl.ui.internal,
+ fr.ytpdsl.ui.labeling,
+ fr.ytpdsl.ui.outline,
  fr.ytpdsl.ui.quickfix,
- fr.ytpdsl.ui.internal
+ fr.ytpdsl.validation
 Bundle-Activator: fr.ytpdsl.ui.internal.YtpdslActivator
