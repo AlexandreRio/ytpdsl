@@ -48,7 +48,8 @@ public class GeneratorHandler extends AbstractHandler {
 		EObject root = resource.getContents().get(0);
 		if (root instanceof YtpModel) {
 			console.printMessageln("Generating a video...");
-			VideoGenerator.generate((YtpModel) root);
+			VideoGenerator generator = new VideoGenerator((YtpModel) root);
+			console.printMessageln(generator.toString());
 		}
 	}
 }

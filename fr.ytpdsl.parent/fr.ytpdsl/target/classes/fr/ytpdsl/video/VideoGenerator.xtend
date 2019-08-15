@@ -9,28 +9,30 @@ import java.util.List
 import java.util.stream.Collectors
 import net.bramp.ffmpeg.FFmpeg
 import net.bramp.ffmpeg.FFprobe
+import java.nio.file.Path
 
 class VideoGenerator {
 
-	/*these should be stored in a generator instance and exposed so the ui can display important stuff  */
-	var static FFprobe ffprobe
-	var static FFmpeg ffmpeg
+	var FFprobe ffprobe
+	var FFmpeg ffmpeg
 
-	def static generate(YtpModel root) {
+	var List<Path> mediaList
+
+	new(YtpModel root) {
 		ffprobe = new FFprobe(root.information.ffprobe)
 		ffmpeg = new FFmpeg(root.information.ffmpeg)
-		var debugString = ffmpeg.version + "\n" + ffprobe.version
-		println(debugString)
+		mediaList = loadLibraries(root.information.library)
+	}
 
-		val mediaList = loadLibraries(root.information.library)
+	private def generate() {
 		mediaList.forEach[video | println(video + " " + ffprobe.probe(video.toString).format.duration) ]
 	}
 
-	def static loadLibraries(List<VideoLibrary> libraries) {
+	private def loadLibraries(List<VideoLibrary> libraries) {
 		libraries.map[lib | scanLibrary(lib)].stream.flatMap[l | l.stream].collect(Collectors.toList)
 	}
 
-	def static scanLibrary(VideoLibrary lib) {
+	private def scanLibrary(VideoLibrary lib) {
 		val folder = new File(lib.folder)
 		print("Scanning " + folder + " ")
 		val res = Files.find(Paths.get(folder.toURI),
@@ -41,4 +43,10 @@ class VideoGenerator {
 		res
 	}
 
+	override toString() {
+		var debugString = ffmpeg.version + "\n" + ffprobe.version + "\n"
+		debugString += mediaList.size + " videos indexed"
+		debugString	
+	}
+	
 }
