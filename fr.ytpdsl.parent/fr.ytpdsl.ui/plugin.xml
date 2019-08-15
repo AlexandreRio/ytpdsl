@@ -136,30 +136,8 @@
 			description="Copy the qualified name for the selected element"
 			name="Copy Qualified Name">
 	</command>
- <category
-       id="fr.ytpdsl.ui.commands.category"
-       name="Sample Category">
- </category>
- <command
-       categoryId="fr.ytpdsl.ui.commands.category"
-       id="fr.ytpdsl.ui.commands.sampleCommand"
-       name="Sample Command">
- </command>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
-		<menuContribution
-			locationURI="popup:#TextEditorContext?after=group.edit">
-			 <command
-				 commandId="fr.ytpdsl.YtpDsl.validate"
-				 style="push"
-				 tooltip="Trigger expensive validation">
-			<visibleWhen checkEnabled="false">
-				<reference
-					definitionId="fr.ytpdsl.YtpDsl.Editor.opened">
-				</reference>
-			</visibleWhen>
-		</command>
-		</menuContribution>
 		<!-- copy qualified name -->
 		<menuContribution locationURI="popup:#TextEditorContext?after=copy">
 			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
@@ -182,19 +160,6 @@
 				</visibleWhen>
 			</command>
 		</menuContribution>
-  <menuContribution
-        locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-     <menu
-           id="fr.ytpdsl.ui.menus.sampleMenu"
-           label="Sample Menu"
-           mnemonic="M">
-        <command
-              commandId="fr.ytpdsl.ui.commands.sampleCommand"
-              id="fr.ytpdsl.ui.menus.sampleCommand"
-              mnemonic="S">
-        </command>
-     </menu>
-  </menuContribution>
   <menuContribution
         allPopups="false"
         locationURI="popup:org.eclipse.ui.popup.any?after=additions">
