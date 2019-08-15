@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension
+		point="org.eclipse.ui.editors">
+		<editor
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+			contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+			default="true"
+			extensions="ytp"
+			id="fr.ytpdsl.YtpDsl"
+			name="YtpDsl Editor">
+		</editor>
+	</extension>
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+			commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
+			<activeWhen>
+				<reference
+					definitionId="fr.ytpdsl.YtpDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+		<handler
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+			commandId="fr.ytpdsl.YtpDsl.validate">
+		<activeWhen>
+			<reference
+					definitionId="fr.ytpdsl.YtpDsl.Editor.opened">
+			</reference>
+		</activeWhen>
+		</handler>
+		<!-- copy qualified name -->
+		<handler
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
+			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName">
+			<activeWhen>
+				<reference definitionId="fr.ytpdsl.YtpDsl.Editor.opened" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
+			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName">
+			<activeWhen>
+				<and>
+					<reference definitionId="fr.ytpdsl.YtpDsl.XtextEditor.opened" />
+					<iterate>
+						<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+					</iterate>
+				</and>
+			</activeWhen>
+		</handler>
+  <handler
+        class="fr.ytpdsl.ui.handlers.SampleHandler"
+        commandId="fr.ytpdsl.ui.commands.sampleCommand">
+  </handler>
+	</extension>
+	<extension point="org.eclipse.core.expressions.definitions">
+		<definition id="fr.ytpdsl.YtpDsl.Editor.opened">
+			<and>
+				<reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
+				<with variable="activeEditor">
+					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+						value="fr.ytpdsl.YtpDsl"
+						forcePluginActivation="true"/>
+				</with>
+			</and>
+		</definition>
+		<definition id="fr.ytpdsl.YtpDsl.XtextEditor.opened">
+			<and>
+				<reference definitionId="isXtextEditorActive"/>
+				<with variable="activeEditor">
+					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+						value="fr.ytpdsl.YtpDsl"
+						forcePluginActivation="true"/>
+				</with>
+			</and>
+		</definition>
+	</extension>
+	<extension
+			point="org.eclipse.ui.preferencePages">
+		<page
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="fr.ytpdsl.YtpDsl"
+			name="YtpDsl">
+			<keywordReference id="fr.ytpdsl.ui.keyword_YtpDsl"/>
+		</page>
+		<page
+			category="fr.ytpdsl.YtpDsl"
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+			id="fr.ytpdsl.YtpDsl.coloring"
+			name="Syntax Coloring">
+			<keywordReference id="fr.ytpdsl.ui.keyword_YtpDsl"/>
+		</page>
+		<page
+			category="fr.ytpdsl.YtpDsl"
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+			id="fr.ytpdsl.YtpDsl.templates"
+			name="Templates">
+			<keywordReference id="fr.ytpdsl.ui.keyword_YtpDsl"/>
+		</page>
+	</extension>
+	<extension
+			point="org.eclipse.ui.propertyPages">
+		<page
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="fr.ytpdsl.YtpDsl"
+			name="YtpDsl">
+			<keywordReference id="fr.ytpdsl.ui.keyword_YtpDsl"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
+	<extension
+		point="org.eclipse.ui.keywords">
+		<keyword
+			id="fr.ytpdsl.ui.keyword_YtpDsl"
+			label="YtpDsl"/>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+	<!-- copy qualified name -->
+	<command
+			id="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+			categoryId="org.eclipse.ui.category.edit"
+			description="Copy the qualified name for the selected element"
+			name="Copy Qualified Name">
+	</command>
+	<command
+			id="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
+			categoryId="org.eclipse.ui.category.edit"
+			description="Copy the qualified name for the selected element"
+			name="Copy Qualified Name">
+	</command>
+ <category
+       id="fr.ytpdsl.ui.commands.category"
+       name="Sample Category">
+ </category>
+ <command
+       categoryId="fr.ytpdsl.ui.commands.category"
+       id="fr.ytpdsl.ui.commands.sampleCommand"
+       name="Sample Command">
+ </command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.edit">
+			 <command
+				 commandId="fr.ytpdsl.YtpDsl.validate"
+				 style="push"
+				 tooltip="Trigger expensive validation">
+			<visibleWhen checkEnabled="false">
+				<reference
+					definitionId="fr.ytpdsl.YtpDsl.Editor.opened">
+				</reference>
+			</visibleWhen>
+		</command>
+		</menuContribution>
+		<!-- copy qualified name -->
+		<menuContribution locationURI="popup:#TextEditorContext?after=copy">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="fr.ytpdsl.YtpDsl.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution locationURI="popup:org.eclipse.xtext.ui.outline?after=additions">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<and>
+						<reference definitionId="fr.ytpdsl.YtpDsl.XtextEditor.opened" />
+						<iterate>
+							<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+						</iterate>
+					</and>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+  <menuContribution
+        locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+     <menu
+           id="fr.ytpdsl.ui.menus.sampleMenu"
+           label="Sample Menu"
+           mnemonic="M">
+        <command
+              commandId="fr.ytpdsl.ui.commands.sampleCommand"
+              id="fr.ytpdsl.ui.menus.sampleCommand"
+              mnemonic="S">
+        </command>
+     </menu>
+  </menuContribution>
+  <menuContribution
+        allPopups="false"
+        locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+     <menu
+           commandId="fr.ytpdsl.ui.commands.sampleCommand"
+           label="Ytp">
+        <command
+              commandId="fr.ytpdsl.ui.commands.sampleCommand"
+              label="Generate"
+              style="push">
+           <visibleWhen
+                 checkEnabled="false">
+						<with variable="activeMenuSelection">
+							<and>
+								<count value="1">
+								</count>
+								<iterate>
+									<adapt type="org.eclipse.core.resources.IFile">
+										<test property="org.eclipse.core.resources.name" value="*.ytp">
+										</test>
+									</adapt>
+								</iterate>
+							</and>
+						</with>
+				</visibleWhen>
+        </command>
+     </menu>
+  </menuContribution>
+	</extension>
+	<extension point="org.eclipse.core.contenttype.contentTypes">
+		<content-type
+			base-type="org.eclipse.core.runtime.text"
+			file-extensions="ytp"
+			id="fr.ytpdsl.YtpDsl.contenttype"
+			name="YtpDsl File"
+			priority="normal">
+		</content-type>
+	</extension>
+	<!-- adding resource factories -->
+	<extension
+		point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			type="ytp">
+		</parser>
+	</extension>
+	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
+		<resourceServiceProvider
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="ytp">
+		</resourceServiceProvider>
+	</extension>
+	<!-- marker definitions for fr.ytpdsl.YtpDsl -->
+	<extension
+			id="ytpdsl.check.fast"
+			name="YtpDsl Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.fast"/>
+		<persistent value="true"/>
+	</extension>
+	<extension
+			id="ytpdsl.check.normal"
+			name="YtpDsl Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.normal"/>
+		<persistent value="true"/>
+	</extension>
+	<extension
+			id="ytpdsl.check.expensive"
+			name="YtpDsl Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.expensive"/>
+		<persistent value="true"/>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="fr.ytpdsl.YtpDsl"
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="fr.ytpdsl.YtpDsl.validator.preferencePage"
+			name="Errors/Warnings">
+			<keywordReference id="fr.ytpdsl.ui.keyword_YtpDsl"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.xtext.builder.participant">
+		<participant
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
+			fileExtensions="ytp"/>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="fr.ytpdsl.YtpDsl"
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="fr.ytpdsl.YtpDsl.compiler.preferencePage"
+			name="Compiler">
+			<keywordReference id="fr.ytpdsl.ui.keyword_YtpDsl"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			category="fr.ytpdsl.YtpDsl"
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="fr.ytpdsl.YtpDsl.compiler.propertyPage"
+			name="Compiler">
+			<keywordReference id="fr.ytpdsl.ui.keyword_YtpDsl"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?after=xtext.ui.openDeclaration">
+			<command
+				commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand"
+				id="fr.ytpdsl.YtpDsl.OpenGeneratedCode"
+				style="push">
+				<visibleWhen checkEnabled="true">
+					<reference definitionId="fr.ytpdsl.YtpDsl.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+		<handler
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.generator.trace.OpenGeneratedFileHandler"
+			commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand">
+			<activeWhen>
+				<reference definitionId="fr.ytpdsl.YtpDsl.Editor.opened" />
+			</activeWhen>
+		</handler>
+	</extension>
+	<!-- Quick Outline -->
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler 
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
+			<activeWhen>
+				<reference
+					definitionId="fr.ytpdsl.YtpDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Open the quick outline."
+			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+			name="Quick Outline">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.open">
+			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+				style="push"
+				tooltip="Open Quick Outline">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="fr.ytpdsl.YtpDsl.Editor.opened"/>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<!-- quickfix marker resolution generator for fr.ytpdsl.YtpDsl -->
+	<extension
+			point="org.eclipse.ui.ide.markerResolution">
+		<markerResolutionGenerator
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="fr.ytpdsl.ui.ytpdsl.check.fast">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+		<markerResolutionGenerator
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="fr.ytpdsl.ui.ytpdsl.check.normal">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+		<markerResolutionGenerator
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="fr.ytpdsl.ui.ytpdsl.check.expensive">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+	</extension>
+	<!-- Rename Refactoring -->
+	<extension point="org.eclipse.ui.handlers">
+		<handler 
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.DefaultRenameElementHandler"
+			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
+			<activeWhen>
+				<reference
+					definitionId="fr.ytpdsl.YtpDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.edit">
+			<command commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
+				style="push">
+				<visibleWhen checkEnabled="false">
+					<reference
+						definitionId="fr.ytpdsl.YtpDsl.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="fr.ytpdsl.YtpDsl"
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+			id="fr.ytpdsl.YtpDsl.refactoring"
+			name="Refactoring">
+			<keywordReference id="fr.ytpdsl.ui.keyword_YtpDsl"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.compare.contentViewers">
+		<viewer id="fr.ytpdsl.YtpDsl.compare.contentViewers"
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+			extensions="ytp">
+		</viewer>
+		<contentTypeBinding
+			contentTypeId="fr.ytpdsl.YtpDsl.contenttype"
+			contentViewerId="fr.ytpdsl.YtpDsl.compare.contentViewers" />
+	</extension>
+	<extension point="org.eclipse.compare.contentMergeViewers">
+		<viewer id="fr.ytpdsl.YtpDsl.compare.contentMergeViewers"
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+			extensions="ytp" label="YtpDsl Compare">
+		</viewer>
+		<contentTypeBinding
+			contentTypeId="fr.ytpdsl.YtpDsl.contenttype"
+			contentMergeViewerId="fr.ytpdsl.YtpDsl.compare.contentMergeViewers" />
+	</extension>
+	<extension point="org.eclipse.ui.editors.documentProviders">
+		<provider id="fr.ytpdsl.YtpDsl.editors.documentProviders"
+			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+			extensions="ytp">
+		</provider>
+	</extension>
+	<extension point="org.eclipse.team.core.fileTypes">
+		<fileTypes
+			extension="ytp"
+			type="text">
+		</fileTypes>
+	</extension>
+ <extension
+       point="org.eclipse.ui.bindings">
+    <key
+          commandId="fr.ytpdsl.ui.commands.sampleCommand"
+          contextId="org.eclipse.ui.contexts.window"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+6">
+    </key>
+ </extension>
+</plugin>
