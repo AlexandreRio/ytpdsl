@@ -22,7 +22,9 @@ class VideoGenerator {
 		var debugString = ffmpeg.version + "\n" + ffprobe.version
 		println(debugString)
 
-		loadLibraries(root.information.library)
+		val mediaList = loadLibraries(root.information.library)
+		mediaList.forEach[video | println(video + " " + ffprobe.probe(video.toString).format.duration) ]
+		
 	}
 
 	def static loadLibraries(List<VideoLibrary> libraries) {
@@ -37,8 +39,6 @@ class VideoGenerator {
 			[path, attr | lib.extension.stream.anyMatch(ext | path.fileName.toString.endsWith(ext))])
 		.collect(Collectors.toList)
 
-		res.forEach[video | println(video + " " + ffprobe.probe(video.toString).format.duration) ]
-		println(res.size + " files found")
 		res
 	}
 

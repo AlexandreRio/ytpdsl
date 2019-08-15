@@ -30,24 +30,30 @@ public class VideoGenerator {
   
   private static FFmpeg ffmpeg;
   
-  public static List<Path> generate(final YtpModel root) {
+  public static void generate(final YtpModel root) {
     try {
-      List<Path> _xblockexpression = null;
-      {
-        String _ffprobe = root.getInformation().getFfprobe();
-        FFprobe _fFprobe = new FFprobe(_ffprobe);
-        VideoGenerator.ffprobe = _fFprobe;
-        String _ffmpeg = root.getInformation().getFfmpeg();
-        FFmpeg _fFmpeg = new FFmpeg(_ffmpeg);
-        VideoGenerator.ffmpeg = _fFmpeg;
-        String _version = VideoGenerator.ffmpeg.version();
-        String _plus = (_version + "\n");
-        String _version_1 = VideoGenerator.ffprobe.version();
-        String debugString = (_plus + _version_1);
-        InputOutput.<String>println(debugString);
-        _xblockexpression = VideoGenerator.loadLibraries(root.getInformation().getLibrary());
-      }
-      return _xblockexpression;
+      String _ffprobe = root.getInformation().getFfprobe();
+      FFprobe _fFprobe = new FFprobe(_ffprobe);
+      VideoGenerator.ffprobe = _fFprobe;
+      String _ffmpeg = root.getInformation().getFfmpeg();
+      FFmpeg _fFmpeg = new FFmpeg(_ffmpeg);
+      VideoGenerator.ffmpeg = _fFmpeg;
+      String _version = VideoGenerator.ffmpeg.version();
+      String _plus = (_version + "\n");
+      String _version_1 = VideoGenerator.ffprobe.version();
+      String debugString = (_plus + _version_1);
+      InputOutput.<String>println(debugString);
+      final List<Path> mediaList = VideoGenerator.loadLibraries(root.getInformation().getLibrary());
+      final Consumer<Path> _function = (Path video) -> {
+        try {
+          String _plus_1 = (video + " ");
+          String _plus_2 = (_plus_1 + Double.valueOf(VideoGenerator.ffprobe.probe(video.toString()).format.duration));
+          InputOutput.<String>println(_plus_2);
+        } catch (Throwable _e) {
+          throw Exceptions.sneakyThrow(_e);
+        }
+      };
+      mediaList.forEach(_function);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -78,19 +84,6 @@ public class VideoGenerator {
         };
         final List<Path> res = Files.find(Paths.get(folder.toURI()), 
           Integer.MAX_VALUE, _function).collect(Collectors.<Path>toList());
-        final Consumer<Path> _function_1 = (Path video) -> {
-          try {
-            String _plus = (video + " ");
-            String _plus_1 = (_plus + Double.valueOf(VideoGenerator.ffprobe.probe(video.toString()).format.duration));
-            InputOutput.<String>println(_plus_1);
-          } catch (Throwable _e) {
-            throw Exceptions.sneakyThrow(_e);
-          }
-        };
-        res.forEach(_function_1);
-        int _size = res.size();
-        String _plus = (Integer.valueOf(_size) + " files found");
-        InputOutput.<String>println(_plus);
         _xblockexpression = res;
       }
       return _xblockexpression;
