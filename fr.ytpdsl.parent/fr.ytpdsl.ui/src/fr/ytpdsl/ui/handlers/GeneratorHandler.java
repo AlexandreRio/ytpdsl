@@ -17,9 +17,10 @@ import com.google.inject.Provider;
 
 import fr.ytpdsl.YtpDslStandaloneSetup;
 import fr.ytpdsl.ui.YtpDSLConsole;
+import fr.ytpdsl.video.VideoGenerator;
 import fr.ytpdsl.ytpDsl.YtpModel;
 
-public class SampleHandler extends AbstractHandler {
+public class GeneratorHandler extends AbstractHandler {
 
 	@Inject
 	private Provider<ResourceSet> resourceSetProvider;
@@ -33,7 +34,7 @@ public class SampleHandler extends AbstractHandler {
 				.getAdapter(IFile.class);
 
 		Injector injector = new YtpDslStandaloneSetup().createInjectorAndDoEMFRegistration();
-		SampleHandler handler = injector.getInstance(SampleHandler.class);
+		GeneratorHandler handler = injector.getInstance(GeneratorHandler.class);
 		handler.run(file.getLocation().toString());
 		return null;
 	}
@@ -46,8 +47,8 @@ public class SampleHandler extends AbstractHandler {
 		Resource resource = set.getResource(URI.createFileURI(input), true);
 		EObject root = resource.getContents().get(0);
 		if (root instanceof YtpModel) {
-			YtpModel ym = (YtpModel) root;
-			console.printMessageln(ym.getInformation().getAuthorName());
+			console.printMessageln("Generating a video...");
+			VideoGenerator.generate((YtpModel) root);
 		}
 	}
 }

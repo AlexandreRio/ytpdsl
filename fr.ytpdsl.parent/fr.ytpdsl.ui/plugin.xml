@@ -53,7 +53,7 @@
 			</activeWhen>
 		</handler>
   <handler
-        class="fr.ytpdsl.ui.handlers.SampleHandler"
+        class="fr.ytpdsl.ui.handlers.GeneratorHandler"
         commandId="fr.ytpdsl.ui.commands.sampleCommand">
   </handler>
 	</extension>
