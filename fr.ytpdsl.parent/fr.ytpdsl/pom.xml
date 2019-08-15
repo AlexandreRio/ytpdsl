@@ -146,4 +146,19 @@
 		</pluginManagement>
 	</build>
 
+	<dependencies>
+		<dependency>
+			<groupId>net.bramp.ffmpeg</groupId>
+			<artifactId>ffmpeg</artifactId>
+		</dependency>
+	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.bramp.ffmpeg</groupId>
+				<artifactId>ffmpeg</artifactId>
+				<version>0.6.2</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

@@ -23,15 +23,6 @@
 				</reference>
 			</activeWhen>
 		</handler>
-		<handler
-			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
-			commandId="fr.ytpdsl.YtpDsl.validate">
-		<activeWhen>
-			<reference
-					definitionId="fr.ytpdsl.YtpDsl.Editor.opened">
-			</reference>
-		</activeWhen>
-		</handler>
 		<!-- copy qualified name -->
 		<handler
 			class="fr.ytpdsl.ui.YtpDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
@@ -54,7 +45,7 @@
 		</handler>
   <handler
         class="fr.ytpdsl.ui.handlers.GeneratorHandler"
-        commandId="fr.ytpdsl.ui.commands.sampleCommand">
+        commandId="fr.ytpdsl.ui.commands.GeneratorCommand">
   </handler>
 	</extension>
 	<extension point="org.eclipse.core.expressions.definitions">
@@ -164,10 +155,10 @@
         allPopups="false"
         locationURI="popup:org.eclipse.ui.popup.any?after=additions">
      <menu
-           commandId="fr.ytpdsl.ui.commands.sampleCommand"
+           commandId="fr.ytpdsl.ui.commands.GeneratorCommand"
            label="Ytp">
         <command
-              commandId="fr.ytpdsl.ui.commands.sampleCommand"
+              commandId="fr.ytpdsl.ui.commands.GeneratorCommand"
               label="Generate"
               style="push">
            <visibleWhen
