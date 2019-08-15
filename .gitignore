@@ -1,3 +1,7 @@
+.*.java_trace
+.*.xtendbin
+xtend-gen
+src-gen
 # Compiled class file
 *.class
 
