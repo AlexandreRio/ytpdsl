@@ -24,7 +24,6 @@ class VideoGenerator {
 
 		val mediaList = loadLibraries(root.information.library)
 		mediaList.forEach[video | println(video + " " + ffprobe.probe(video.toString).format.duration) ]
-		
 	}
 
 	def static loadLibraries(List<VideoLibrary> libraries) {
