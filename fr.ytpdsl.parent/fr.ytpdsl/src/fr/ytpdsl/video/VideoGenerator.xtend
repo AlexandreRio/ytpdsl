@@ -88,7 +88,20 @@ class VideoGenerator {
 		shorterVideoList.add(outName)
 
 		println((totalDuration as int ) / 2 as long + " ns from start for 5s")
-		builder.addOutput(destinationFolder + "/" + outName).setDuration(2, TimeUnit.SECONDS).done
+		// this should be computed from the model of course
+		val durationOfClip = ((Math.random * 5) + 2) as int
+		builder.addOutput(destinationFolder + "/" + outName)
+			.setDuration(durationOfClip, TimeUnit.SECONDS)
+			.setFormat("mp4")
+			.disableSubtitle()
+			.setAudioChannels(1)
+			.setAudioCodec("aac")
+			.setAudioSampleRate(48000)
+			.setAudioBitRate(32768)
+			.setVideoCodec("libx264")
+			.setVideoFrameRate(24, 1)
+			.setVideoResolution(640, 480) // who needs HD for a poop?
+			.done
 		executor.createJob(builder).run()
 	}
 
