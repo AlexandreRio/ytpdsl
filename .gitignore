@@ -1,5 +1,7 @@
 .*.java_trace
 .*.xtendbin
+*.java._trace
+*/target/*
 xtend-gen
 src-gen
 # Compiled class file

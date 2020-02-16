@@ -42,13 +42,16 @@ public class GeneratorHandler extends AbstractHandler {
 
 	private YtpDSLConsole console = YtpDSLConsole.getInstance();
 
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-
+	private IFile getCurrentFile() {
 		IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActivePart();
 		IFile file = (IFile) workbenchPart.getSite().getPage().getActiveEditor().getEditorInput()
 				.getAdapter(IFile.class);
+
+		return file;
+	}
+
+	private IFolder createFolder(IFile file) {
 		IFolder destFolder = file.getProject().getFolder("src-gen");
 		if (!destFolder.exists()) {
 			try {
@@ -57,14 +60,22 @@ public class GeneratorHandler extends AbstractHandler {
 				console.printErrorln("Cannot create destination folder : " + e.getMessage());
 			}
 		}
+		return destFolder;
+	}
+
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		IFile file = getCurrentFile();
+		IFolder destFolder = createFolder(file);
 
 		Injector injector = new YtpDslStandaloneSetup().createInjectorAndDoEMFRegistration();
 		GeneratorHandler handler = injector.getInstance(GeneratorHandler.class);
+
 		handler.run(file.getLocation().toString(), destFolder.getLocation().toString());
+
 		return null;
 	}
-	
-	
+
 	public void run(String inputModelPath, String outputDirPath) {
 		YtpDSLConsole console = YtpDSLConsole.getInstance();
 
@@ -79,7 +90,8 @@ public class GeneratorHandler extends AbstractHandler {
 					monitor.beginTask("fait des trucs", 100);
 					VideoGenerator generator = new VideoGenerator((YtpModel) root, outputDirPath);
 					FFmpegExecutor executor = new FFmpegExecutor(generator.ffmpeg, generator.ffprobe);
-					executor.createJob(generator.build().done(), new ProgressListener() {
+
+					executor.createJob(generator.build(), new ProgressListener() {
 						private int lastPercentage = 0;
 
 						@Override
@@ -88,7 +100,7 @@ public class GeneratorHandler extends AbstractHandler {
 							int roundedPercentage = ((int)percentage*100);
 							if (lastPercentage != roundedPercentage) {
 								monitor.worked(roundedPercentage - lastPercentage);
-								lastPercentage =  roundedPercentage;
+								lastPercentage = roundedPercentage;
 							}
 
 							console.printMessageln(String.format(
@@ -102,7 +114,7 @@ public class GeneratorHandler extends AbstractHandler {
 								));
 						}}
 					).run();
-					
+
 					setProperty(IProgressConstants.KEEP_PROPERTY, Boolean.TRUE);
 					setProperty(IProgressConstants.ACTION_PROPERTY, displayResultAction());
 					return Status.OK_STATUS;
