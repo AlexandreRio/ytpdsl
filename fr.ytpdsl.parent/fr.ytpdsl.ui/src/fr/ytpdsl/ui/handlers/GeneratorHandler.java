@@ -91,7 +91,7 @@ public class GeneratorHandler extends AbstractHandler {
 					VideoGenerator generator = new VideoGenerator((YtpModel) root, outputDirPath);
 					FFmpegExecutor executor = new FFmpegExecutor(generator.ffmpeg, generator.ffprobe);
 
-					executor.createJob(generator.build(), new ProgressListener() {
+					executor.createJob(generator.build((YtpModel)root), new ProgressListener() {
 						private int lastPercentage = 0;
 
 						@Override

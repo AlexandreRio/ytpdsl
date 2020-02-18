@@ -12,12 +12,12 @@ import java.util.List
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
+import java.time.Duration
 import net.bramp.ffmpeg.FFmpeg
 import net.bramp.ffmpeg.FFmpegExecutor
 import net.bramp.ffmpeg.FFprobe
 import net.bramp.ffmpeg.builder.FFmpegBuilder
-import java.nio.charset.Charset
-import java.nio.file.StandardOpenOption
+import net.bramp.ffmpeg.builder.FFmpegBuilder.Verbosity
 
 class VideoGenerator {
 
@@ -63,7 +63,8 @@ class VideoGenerator {
 	def concat() {
 //		Files.list(Paths.get(destinationFolder)).filter(v|v.endsWith(".mp4"))
 		var builder = new FFmpegBuilder()
-		builder.input = destinationFolder + "/" + PLAYLIST_FILE
+		builder.addExtraArgs("-accurate_seek")
+			.setInput(destinationFolder + "/" + PLAYLIST_FILE)
 		builder.format = "concat"
 		builder.addExtraArgs("-safe", "0")
 		builder.addOutput(destinationFolder + "/sortie.mp4").done
@@ -77,20 +78,22 @@ class VideoGenerator {
 		println("picking " + video)
 		val totalDuration = duration(video)
 
-		var builder = new FFmpegBuilder()
-		builder.input = video
-
-		var offset = (totalDuration as int ) / 2 as long
-		builder.setStartOffset(offset, TimeUnit.NANOSECONDS)
+		var long offset = (totalDuration as int ) / 2 as long
 		val outName = UUID.randomUUID + ".mp4"
 
-		println("total duration " + totalDuration + " offset " + offset + " " + outName)
-		shorterVideoList.add(outName)
+		println(" offset " + durationToTimeCode(offset) + " " + outName)
 
-		println((totalDuration as int ) / 2 as long + " ns from start for 5s")
 		// this should be computed from the model of course
 		val durationOfClip = ((Math.random * 5) + 2) as int
+
+		var builder = new FFmpegBuilder()
+		builder.verbosity = Verbosity.QUIET
+		builder.addExtraArgs("-noaccurate_seek")
+			.setInput(video)
+			.setStartOffset(offset, TimeUnit.SECONDS)
+
 		builder.addOutput(destinationFolder + "/" + outName)
+			.setStrict(FFmpegBuilder.Strict.NORMAL)
 			.setDuration(durationOfClip, TimeUnit.SECONDS)
 			.setFormat("mp4")
 			.disableSubtitle()
@@ -102,10 +105,12 @@ class VideoGenerator {
 			.setVideoFrameRate(24, 1)
 			.setVideoResolution(640, 480) // who needs HD for a poop?
 			.done
+
+		shorterVideoList.add(outName)
 		executor.createJob(builder).run()
 	}
 
-	def build() {
+	def build(YtpModel model) {
 		for (var i = 0; i < 10; i++) {
 			generateShortVideo()
 		}
@@ -139,4 +144,13 @@ class VideoGenerator {
 		debugString
 	}
 
+	/** utils, ok I'll move that to a dedicated file */
+
+	/**
+	 * @param offset duration in seconds
+	 */
+	def durationToTimeCode(long offset) {
+		val d = Duration.ofSeconds(offset)
+		d.toMinutes + ":" + (d.seconds%60)
+	}
 }
