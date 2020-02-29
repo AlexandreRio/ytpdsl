@@ -18,7 +18,6 @@ class YtpDslParsingTest {
 	@Inject
 	ParseHelper<YtpModel> parseHelper
 	
-	@Test
 	def void loadModel() {
 		val result = parseHelper.parse('''
 			Hello Xtext!
