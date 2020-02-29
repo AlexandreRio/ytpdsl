@@ -11,6 +11,8 @@ GeneratorInformation:
 	('@author' authorName=STRING)
 	('@version' version=STRING)?
 	('@creation' creationDate=STRING)?
+
+// paths should be loaded in a config files and shouldn't be part of the model
 	('FFMPEG_PATH' ffmpeg=STRING)
 	('FFPROBE_PATH' ffprobe=STRING)
 	library+=VideoLibrary*
@@ -18,6 +20,22 @@ GeneratorInformation:
 
 VideoLibrary:
 	'folder' folder=STRING 'ext' (extension+=STRING)+
+;
+
+Moment:
+	'from' path=STRING 
+	moments+=Part
+;
+
+Part returns Part:
+	start=TimeCode '->' ( end=TimeCode | duration=Duration)
+;
+Duration:
+	INT ('hour'|'minute'|'second')?
+;
+
+TimeCode:
+	(INT+ ':')? INT INT ':' INT INT
 ;
 
 Media:
@@ -54,8 +72,7 @@ VideoText:
 	('size' size=INT)?
 	RIGHT_BRACKET;
 
-Position:
-	'TOP' | 'BOTTOM' | 'CENTER';
+// FILTERS
 
 Filter:
 	FlipFilter | NegateFilter | BlackWhiteFilter;
@@ -71,10 +88,14 @@ NegateFilter:
 FlipFilter:
 	'flip' orientation=('h' | 'horizontal' | 'v' | 'vertical');
 
+
+
+Position:
+	'TOP' | 'BOTTOM' | 'CENTER';
+
+
 terminal LEFT_BRACKET:
 	'{';
 
 terminal RIGHT_BRACKET:
 	'}';
-
-	
