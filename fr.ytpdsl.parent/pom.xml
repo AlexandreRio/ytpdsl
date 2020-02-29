@@ -25,7 +25,7 @@
 		<module>fr.ytpdsl.ui</module>
 		<module>fr.ytpdsl.target</module>
 		<module>fr.ytpdsl.tests</module>
-		<module>fr.ytpdsl.ui.tests</module>
+		<!-- <module>fr.ytpdsl.ui.tests</module>-->
 		<module>fr.ytpdsl.third-party</module>
 	</modules>
 	<dependencyManagement>
