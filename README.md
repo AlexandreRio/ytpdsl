@@ -1,6 +1,8 @@
 YTP DSL
 ===
 
+![Java CI](https://github.com/AlexandreRio/ytpdsl/workflows/Java%20CI/badge.svg)
+
 A Domain Specific Language to generate videos based on video libraries and some math.
 
 It is inspired by https://github.com/FAMILIAR-project/VideoGen2 and https://twitter.com/acherm video editing DSL.
@@ -14,6 +16,18 @@ For now all the magic happens in `fr.ytpdsl.parent/fr.ytpdsl/`
 
 # Features
 
+A cool DSL, lame videos and bad algorithm for bad editing.
+
 # Roadmap
 
+- [ ]: store metadata of linked media to a local db,
+- [ ]: separate library media from media definiton from a path and a time code+duration,
+- [ ]: allow custom filter to be written,
+- [ ]: generic input connector for yt link or remote content,
+- [ ]: media analysis such as audio bpm, srt NLP
+
+and so much more, from better input (besides DSL) to better output (direct uploading to host server).
+
 # Contributing
+
+This is a toy project, nothing big but if you have feedbacks open an issue or ping on [twitter](https://twitter.com/Rio_Alx) or by email (details on my website).
