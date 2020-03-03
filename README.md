@@ -20,11 +20,11 @@ A cool DSL, lame videos and bad algorithm for bad editing.
 
 # Roadmap
 
-- [ ]: store metadata of linked media to a local db,
-- [ ]: separate library media from media definiton from a path and a time code+duration,
-- [ ]: allow custom filter to be written,
-- [ ]: generic input connector for yt link or remote content,
-- [ ]: media analysis such as audio bpm, srt NLP
+- [ ] store metadata of linked media to a local db,
+- [ ] separate library media from media definiton from a path and a time code+duration,
+- [ ] allow custom filter to be written,
+- [ ] generic input connector for yt link or remote content,
+- [ ] media analysis such as audio bpm, srt NLP
 
 and so much more, from better input (besides DSL) to better output (direct uploading to host server).
 
