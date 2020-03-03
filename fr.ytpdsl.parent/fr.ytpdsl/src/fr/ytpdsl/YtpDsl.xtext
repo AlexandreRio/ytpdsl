@@ -4,7 +4,7 @@ generate ytpDsl "http://www.ytpdsl.fr/YtpDsl"
 
 YtpModel:
 	(information=GeneratorInformation)?
-	medias+=Media+;
+;
 
 GeneratorInformation:
 	{GeneratorInformation}
@@ -19,6 +19,13 @@ GeneratorInformation:
 ;
 
 VideoLibrary:
+	(Media | Folder)
+;
+
+Media:
+	'media' name=ID moment=Moment
+;
+Folder:
 	'folder' folder=STRING 'ext' (extension+=STRING)+
 ;
 
@@ -28,18 +35,19 @@ Moment:
 ;
 
 Part returns Part:
-	start=TimeCode '->' ( end=TimeCode | duration=Duration)
+	'moment' start=TimeCode '->' ( end=TimeCode | duration=Duration)
 ;
+
 Duration:
 	INT ('hour'|'minute'|'second')?
 ;
 
 TimeCode:
-	(INT+ ':')? INT INT ':' INT INT
+	(INT+ ':')? INT ':' INT
 ;
 
-Media:
-	'media' description=MediaDescription
+Description:
+	description=MediaDescription
 ;
 
 MediaDescription:
@@ -89,10 +97,10 @@ FlipFilter:
 	'flip' orientation=('h' | 'horizontal' | 'v' | 'vertical');
 
 
+// CONSTANTS and TERMINALS
 
 Position:
 	'TOP' | 'BOTTOM' | 'CENTER';
-
 
 terminal LEFT_BRACKET:
 	'{';

@@ -1,5 +1,7 @@
 package fr.ytpdsl.video
 
+import fr.ytpdsl.ytpDsl.Folder
+import fr.ytpdsl.ytpDsl.Media
 import fr.ytpdsl.ytpDsl.VideoLibrary
 import fr.ytpdsl.ytpDsl.YtpModel
 import java.io.File
@@ -7,12 +9,13 @@ import java.io.PrintWriter
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.time.Duration
 import java.util.ArrayList
+import java.util.Collections
 import java.util.List
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
-import java.time.Duration
 import net.bramp.ffmpeg.FFmpeg
 import net.bramp.ffmpeg.FFmpegExecutor
 import net.bramp.ffmpeg.FFprobe
@@ -36,10 +39,52 @@ class VideoGenerator {
 	new(YtpModel root, String destinationDirectory) {
 		ffprobe = new FFprobe(root.information.ffprobe)
 		ffmpeg = new FFmpeg(root.information.ffmpeg)
-		mediaList = loadLibraries(root.information.library)
+		mediaList = loadLibrary(root.information.library)
 
 		shorterVideoList = new ArrayList
 		destinationFolder = destinationDirectory
+	}
+
+	/**
+	 * Load Folder and specific Moments
+	 */
+	def loadLibrary(List<VideoLibrary> vl) {
+		vl.map[l|
+			if (l instanceof Folder) {
+				loadFolder(l)
+			} else if (l instanceof Media) {
+				loadMedia(l)
+			}
+		].stream
+		.flatMap[l|l.stream]
+		.collect(Collectors.toList)
+
+	}
+
+	private def loadFolder(Folder folder) {
+		scanLibrary(folder).stream.collect(Collectors.toList)
+	}
+
+	/**
+	 * Load Media in order to extract specific moments in it
+	 */
+	private def loadMedia(Media media) {
+		media.name
+		media.moment.path
+		media.moment.moments.map[moment|
+			moment.toString
+		]
+		return Collections.EMPTY_LIST
+	}
+
+	private def scanLibrary(Folder lib) {
+		val folder = new File(lib.folder)
+		print("Scanning " + folder + " ")
+		val res = Files.find(Paths.get(folder.toURI), Integer.MAX_VALUE, [ path, attr |
+			lib.extension.stream.anyMatch(ext|path.fileName.toString.endsWith(ext))
+		]).collect(Collectors.toList)
+		println(res.size + " elements founds")
+		res
 	}
 
 	/**
@@ -63,8 +108,7 @@ class VideoGenerator {
 	def concat() {
 //		Files.list(Paths.get(destinationFolder)).filter(v|v.endsWith(".mp4"))
 		var builder = new FFmpegBuilder()
-		builder.addExtraArgs("-accurate_seek")
-			.setInput(destinationFolder + "/" + PLAYLIST_FILE)
+		builder.addExtraArgs("-accurate_seek").setInput(destinationFolder + "/" + PLAYLIST_FILE)
 		builder.format = "concat"
 		builder.addExtraArgs("-safe", "0")
 		builder.addOutput(destinationFolder + "/sortie.mp4").done
@@ -88,22 +132,12 @@ class VideoGenerator {
 
 		var builder = new FFmpegBuilder()
 		builder.verbosity = Verbosity.QUIET
-		builder.addExtraArgs("-noaccurate_seek")
-			.setInput(video)
-			.setStartOffset(offset, TimeUnit.SECONDS)
+		builder.addExtraArgs("-noaccurate_seek").setInput(video).setStartOffset(offset, TimeUnit.SECONDS)
 
-		builder.addOutput(destinationFolder + "/" + outName)
-			.setStrict(FFmpegBuilder.Strict.NORMAL)
-			.setDuration(durationOfClip, TimeUnit.SECONDS)
-			.setFormat("mp4")
-			.disableSubtitle()
-			.setAudioChannels(1)
-			.setAudioCodec("aac")
-			.setAudioSampleRate(48000)
-			.setAudioBitRate(32768)
-			.setVideoCodec("libx264")
-			.setVideoFrameRate(24, 1)
-			.setVideoResolution(640, 480) // who needs HD for a poop?
+		builder.addOutput(destinationFolder + "/" + outName).setStrict(FFmpegBuilder.Strict.NORMAL).setDuration(
+			durationOfClip, TimeUnit.SECONDS).setFormat("mp4").disableSubtitle().setAudioChannels(1).
+			setAudioCodec("aac").setAudioSampleRate(48000).setAudioBitRate(32768).setVideoCodec("libx264").
+			setVideoFrameRate(24, 1).setVideoResolution(640, 480) // who needs HD for a poop?
 			.done
 
 		shorterVideoList.add(outName)
@@ -117,26 +151,14 @@ class VideoGenerator {
 		val playlistAsPath = Paths.get(destinationFolder, PLAYLIST_FILE)
 		val writer = new PrintWriter(Files.newBufferedWriter(playlistAsPath))
 
-		val playlist = shorterVideoList.map[f | 'file \'' + f + '\''].stream.collect(Collectors.joining("\n"))
+		val playlist = shorterVideoList.map[f|'file \'' + f + '\''].stream.collect(Collectors.joining("\n"))
 		println(playlist)
 		writer.write(playlist)
 		writer.flush
 		concat
 	}
 
-	private def loadLibraries(List<VideoLibrary> libraries) {
-		libraries.map[lib|scanLibrary(lib)].stream.flatMap[l|l.stream].collect(Collectors.toList)
-	}
 
-	private def scanLibrary(VideoLibrary lib) {
-		val folder = new File(lib.folder)
-		print("Scanning " + folder + " ")
-		val res = Files.find(Paths.get(folder.toURI), Integer.MAX_VALUE, [ path, attr |
-			lib.extension.stream.anyMatch(ext|path.fileName.toString.endsWith(ext))
-		]).collect(Collectors.toList)
-		println(res.size + " elements founds")
-		res
-	}
 
 	override toString() {
 		var debugString = ffmpeg.version + "\n" + ffprobe.version + "\n"
@@ -145,12 +167,11 @@ class VideoGenerator {
 	}
 
 	/** utils, ok I'll move that to a dedicated file */
-
 	/**
 	 * @param offset duration in seconds
 	 */
 	def durationToTimeCode(long offset) {
 		val d = Duration.ofSeconds(offset)
-		d.toMinutes + ":" + (d.seconds%60)
+		d.toMinutes + ":" + (d.seconds % 60)
 	}
 }

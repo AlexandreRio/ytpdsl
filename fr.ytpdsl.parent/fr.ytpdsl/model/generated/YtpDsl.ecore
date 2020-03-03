@@ -4,8 +4,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="YtpModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="information" eType="#//GeneratorInformation"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="medias" upperBound="-1"
-        eType="#//Media" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GeneratorInformation">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="authorName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -16,7 +14,13 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="library" upperBound="-1"
         eType="#//VideoLibrary" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VideoLibrary">
+  <eClassifiers xsi:type="ecore:EClass" name="VideoLibrary"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Media" eSuperTypes="#//VideoLibrary">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="moment" eType="#//Moment"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Folder" eSuperTypes="#//VideoLibrary">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="folder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="extension" unique="false"
         upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -31,7 +35,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Media">
+  <eClassifiers xsi:type="ecore:EClass" name="Description">
     <eStructuralFeatures xsi:type="ecore:EReference" name="description" eType="#//MediaDescription"
         containment="true"/>
   </eClassifiers>

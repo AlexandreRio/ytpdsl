@@ -8,7 +8,6 @@
       fileExtensions="ytp" ecorePackage="YtpDsl.ecore#/">
     <genClasses ecoreClass="YtpDsl.ecore#//YtpModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference YtpDsl.ecore#//YtpModel/information"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference YtpDsl.ecore#//YtpModel/medias"/>
     </genClasses>
     <genClasses ecoreClass="YtpDsl.ecore#//GeneratorInformation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute YtpDsl.ecore#//GeneratorInformation/authorName"/>
@@ -18,9 +17,14 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute YtpDsl.ecore#//GeneratorInformation/ffprobe"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference YtpDsl.ecore#//GeneratorInformation/library"/>
     </genClasses>
-    <genClasses ecoreClass="YtpDsl.ecore#//VideoLibrary">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute YtpDsl.ecore#//VideoLibrary/folder"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute YtpDsl.ecore#//VideoLibrary/extension"/>
+    <genClasses ecoreClass="YtpDsl.ecore#//VideoLibrary"/>
+    <genClasses ecoreClass="YtpDsl.ecore#//Media">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute YtpDsl.ecore#//Media/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference YtpDsl.ecore#//Media/moment"/>
+    </genClasses>
+    <genClasses ecoreClass="YtpDsl.ecore#//Folder">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute YtpDsl.ecore#//Folder/folder"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute YtpDsl.ecore#//Folder/extension"/>
     </genClasses>
     <genClasses ecoreClass="YtpDsl.ecore#//Moment">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute YtpDsl.ecore#//Moment/path"/>
@@ -31,8 +35,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute YtpDsl.ecore#//Part/end"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute YtpDsl.ecore#//Part/duration"/>
     </genClasses>
-    <genClasses ecoreClass="YtpDsl.ecore#//Media">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference YtpDsl.ecore#//Media/description"/>
+    <genClasses ecoreClass="YtpDsl.ecore#//Description">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference YtpDsl.ecore#//Description/description"/>
     </genClasses>
     <genClasses ecoreClass="YtpDsl.ecore#//MediaDescription">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute YtpDsl.ecore#//MediaDescription/location"/>
