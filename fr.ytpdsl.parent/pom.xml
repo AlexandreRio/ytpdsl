@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.ytpdsl</groupId>
@@ -8,6 +9,7 @@
 
 	<properties>
 		<xtextVersion>2.18.0.M3</xtextVersion>
+		<git-commit-id-plugin.version>2.2.4</git-commit-id-plugin.version>
 		<project.build.sourceEncoding>windows-1252</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -25,8 +27,9 @@
 		<module>fr.ytpdsl.ui</module>
 		<module>fr.ytpdsl.target</module>
 		<module>fr.ytpdsl.tests</module>
-		<!-- <module>fr.ytpdsl.ui.tests</module>-->
+		<!-- <module>fr.ytpdsl.ui.tests</module> -->
 		<module>fr.ytpdsl.third-party</module>
+		<module>../fr.ytpdsl.standalone</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
@@ -210,10 +213,7 @@
 					</configuration>
 				</plugin>
 				<plugin>
-					<!-- 
-						Can be removed after first generator execution
-						https://bugs.eclipse.org/bugs/show_bug.cgi?id=480097
-					-->
+					<!-- Can be removed after first generator execution https://bugs.eclipse.org/bugs/show_bug.cgi?id=480097 -->
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-compiler-plugin</artifactId>
 					<version>${tycho-version}</version>
@@ -222,10 +222,9 @@
 						<useProjectSettings>false</useProjectSettings>
 					</configuration>
 				</plugin>
-				<!-- to skip running (and compiling) tests use commandline flag: -Dmaven.test.skip
-					To skip tests, but still compile them, use: -DskipTests
-					To allow all tests in a pom to pass/fail, use commandline flag: -fae (fail
-					at end) -->
+				<!-- to skip running (and compiling) tests use commandline flag: -Dmaven.test.skip 
+					To skip tests, but still compile them, use: -DskipTests To allow all tests 
+					in a pom to pass/fail, use commandline flag: -fae (fail at end) -->
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-surefire-plugin</artifactId>

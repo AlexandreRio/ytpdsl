@@ -72,6 +72,9 @@ class VideoGenerator {
 		media.name
 		media.moment.path
 		media.moment.moments.map[moment|
+			moment.start
+			moment.end
+			moment.duration
 			moment.toString
 		]
 		return Collections.EMPTY_LIST
